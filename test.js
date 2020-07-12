@@ -1,3 +1,10 @@
-var world="world"
-var hello="Hello";
-alert(hello+world);
+function sayhi(person = "Stranger")
+{
+var hello="Hello ";
+document.write(hello+person+"\n");
+}
+person="Boogie"
+sayhi(person);
+person="Lucy"
+sayhi(person);
+sayhi();
