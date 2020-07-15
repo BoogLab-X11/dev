@@ -144,19 +144,19 @@ constructName.prototype.titleTest=titleTest; // adding a function via prototype
 whoDiss.titleTest();
 
 
-class myGayClass {  // OO way of creating objects, does same as above but allows inheritence
+class myCrapClass {  // OO way of creating objects, does same as above but allows inheritence
   constructor(wee,poo){
     this.wee=wee; // <-----see below
     this.poo=poo; // <-----
   }
 }
 
-var gc1 = new myGayClass('Yellow<br>','Brown'); // create object
+var gc1 = new myCrapClass('Yellow<br>','Brown'); // create object
 document.write(gc1.wee);
 
-class bodyFluids extends myGayClass{ // subclass bodyFluids inherits from myGayClass
+class bodyFluids extends myCrapClass{ // subclass bodyFluids inherits from myCrapClass
   constructor(wee,poo){
-    super(wee,poo); // the superclass is myGayClass, this just runs  <---- above
+    super(wee,poo); // the superclass is myCrapClass, this just runs  <---- above
     this.snot="Green<br>"; // only exists in this class, not the superclass
 }
 }
