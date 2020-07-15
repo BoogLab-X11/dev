@@ -84,10 +84,22 @@ example();
 
 var person = {
     firstName   :"Andy",
+    midName     :"",
     lastName    :"Booth",
     // Since the "this" keyword is used inside the showFullName method below, and the showFullName method is defined on the person object,
     // "this" will have the value of the person object because the person object will invoke showFullName ()
     showFullName:function () {
-    document.write ("<br>"+this.firstName + " " + this.lastName);
-    }}
-    person.showFullName ();
+    document.write ("<br>"+this.firstName + " " + this.lastName+"<br>");
+  },
+    get poshName(){
+        return this.firstName+" de "+this.lastName;
+      },
+    set addMidName(mid){
+      this.midName=mid;
+    }
+    }
+
+person.showFullName ();
+document.write(person.poshName);
+person.addMidName = "Perry";
+document.write(person.midName);
