@@ -82,6 +82,8 @@ var example = function () {
 };
 example();
 
+
+
 var person = {
     firstName   :"Andy",
     midName     :"",
@@ -101,5 +103,63 @@ var person = {
 
 person.showFullName ();
 document.write(person.poshName);
-person.addMidName = "Perry";
-document.write(person.midName);
+person.addMidName = "<br>Perry"; // call to 'set' in object, don't call like a function!
+document.write(person.midName+"<br>");
+
+
+
+
+function constructName(firstName,midName,lastName){ //Constructor function, fuck yeah!
+  this.firstName=firstName;
+  this.midName=midName;
+  this.lastName=lastName;
+  this.wholeName=function(){
+    document.write(this.firstName+this.midName+this.lastName)
+  }
+  }
+
+
+var whoDiss = new constructName("Andrew","Perry","Booth<br>");
+var whoDat = new constructName("Lucy","Avril","Wainwright<br>");
+//Note, you can't add names or functions once an object is constructed like this: constructName.Title="Mr"
+//but you can add to constructed objects like below:
+whoDat.title="Miss";
+whoDiss.title="Mr";
+whoDiss.wholeName();
+document.write(whoDat.title+" "+whoDat.firstName+" "+whoDat.lastName)
+
+constructName.prototype.disposition="The lovely "; // adds to all current or future objects
+document.write(whoDat.disposition+whoDat.title+" "+whoDat.firstName+" "+whoDat.lastName);
+
+var titleTest = function(){  // adding a function via prototype
+  if (this.title=="Mr"){
+    document.write("Boy<br>")
+  }
+  else {
+    document.write("Girl")
+  }
+  }
+
+constructName.prototype.titleTest=titleTest; // adding a function via prototype
+whoDiss.titleTest();
+
+
+class myGayClass {  // OO way of creating objects, does same as above but allows inheritence
+  constructor(wee,poo){
+    this.wee=wee; // <-----see below
+    this.poo=poo; // <-----
+  }
+}
+
+var gc1 = new myGayClass('Yellow<br>','Brown'); // create object
+document.write(gc1.wee);
+
+class bodyFluids extends myGayClass{ // subclass bodyFluids inherits from myGayClass
+  constructor(wee,poo){
+    super(wee,poo); // the superclass is myGayClass, this just runs  <---- above
+    this.snot="Green<br>"; // only exists in this class, not the superclass
+}
+}
+
+var bf1 = new bodyFluids('Yellow','Brown'); // create object
+document.write(bf1.snot);
