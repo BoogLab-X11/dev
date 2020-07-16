@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+
+<style type="text/css">
+  canvas {
+    border: 2px solid black;
+    background-color: red;
+  }
+</style>
+
+</head>
+<body>
+
+<canvas  id="myCanvas" height="500" width="1000"> // set up canvas
+</canvas>
+
+<script type='text/javascript'>
+
+var canvas = document.getElementById('myCanvas');
+var ctx = canvas.getContext('2d'); // get context from canvas object
+let screenWidth = 1000;
+let screenHeight = 500;
+
+class gameBaddie { // class for game character
+  constructor(x,y,wid,hi,col,speed){
+    this.x=x;
+    this.y=y;
+    this.wid=wid;
+    this.hi=hi;
+    this.col=col;
+    this.speed=speed;
+  }
+    move(xAmount,yAmount){
+      this.x+=xAmount;
+      this.y+=yAmount;
+    }
+}
+
+var xoff=250;
+var yoff=100;
+var baddie=[]; // declare array before assigning below.
+
+for (i=1;i<4;i++){ // create baddies from gameBaddie class
+  baddie[i] = new gameBaddie((i*xoff),(i*yoff),50,50,"rgb(0,0,255)",3);
+}
+
+
+var draw = function(){ // function draw baddies
+  ctx.clearRect(0,0,screenWidth,screenHeight);
+  baddie.forEach (function(element){ // this is just blah.foreach(somecode)
+  ctx.fillStyle = element.col;
+  ctx.fillRect(element.x, element.y, element.wid, element.hi);
+})
+}
+
+ /* Could also use:
+  for (i=1;i<4;i++){
+  ctx.fillStyle = baddie[i].col;
+  ctx.fillRect(baddie[i].x, baddie[i].y, baddie[i].wid, baddie[i].hi);
+  }} */
+
+var update = function(){ // // function to update and move baddies
+  baddie.forEach (function(element){
+    element.move(0,element.speed);
+    if (element.y>=445){
+      element.speed=(-3);
+        }
+      else if (element.y<=5){
+        element.speed=3;
+      }
+    })
+}
+
+var step= function(){ // main game loop
+  update();
+  draw();
+  window.requestAnimationFrame(step);
+  }
+step();
+
+</script>
+
+</body>
+</html>
