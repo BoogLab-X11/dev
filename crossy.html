@@ -23,7 +23,7 @@ var ctx = canvas.getContext('2d'); // get context from canvas object
 let screenWidth = 1000;
 let screenHeight = 500;
 
-class gameBaddie { // class for game character
+class gameChar { // class for game character
   constructor(x,y,wid,hi,col,speed){
     this.x=x;
     this.y=y;
@@ -38,18 +38,36 @@ class gameBaddie { // class for game character
     }
 }
 
+var bang=false;
 var xoff=250;
 var yoff=100;
 var baddie=[]; // declare array before assigning below.
 
 for (i=1;i<4;i++){ // create baddies from gameBaddie class
-  baddie[i] = new gameBaddie((i*xoff),(i*yoff),50,50,"rgb(0,0,255)",3);
+  baddie[i] = new gameChar((i*xoff),(i*yoff),50,50,"rgb(0,0,255)",3);
 }
 
+player = new gameChar(100,200,50,50,"rgb(0,255,0)",0); // create player
+
+document.onkeydown = function(event){
+  let keyPressed=event.keyCode;
+  if(keyPressed==88){
+    player.speed=3;
+  }
+  else if(keyPressed==90){
+    player.speed=(-3);
+  }
+}
+
+document.onkeyup = function(event){
+  player.speed=0;
+}
 
 var draw = function(){ // function draw baddies
   ctx.clearRect(0,0,screenWidth,screenHeight);
-  baddie.forEach (function(element){ // this is just blah.foreach(somecode)
+  ctx.fillStyle = player.col;
+  ctx.fillRect(player.x, player.y, player.wid, player.hi);
+  baddie.forEach (function(element){ // this is just blah.foreach(someFunction{someCode}), see updateAndMove
   ctx.fillStyle = element.col;
   ctx.fillRect(element.x, element.y, element.wid, element.hi);
 })
@@ -61,16 +79,30 @@ var draw = function(){ // function draw baddies
   ctx.fillRect(baddie[i].x, baddie[i].y, baddie[i].wid, baddie[i].hi);
   }} */
 
-var update = function(){ // // function to update and move baddies
-  baddie.forEach (function(element){
-    element.move(0,element.speed);
+var update = function(){ // // function to update and move player & baddies
+  player.move(player.speed,0);
+
+  function updateAndMove(element){ // this time declare function outside of forEach
+    element.move(0,element.speed); // performs same as forEach in the draw() function
     if (element.y>=445){
       element.speed=(-3);
         }
       else if (element.y<=5){
         element.speed=3;
-      }
-    })
+      }}
+
+      function checkCollide(rect){
+      var xOver=Math.abs(player.x - rect.x) <= 50;
+      var yOver=Math.abs(player.y - rect.y) <= 50;
+      bang = (xOver && yOver);
+    }
+
+baddie.forEach(updateAndMove); //Call function updateAndMove for each object
+baddie.forEach(checkCollide); //Call function collission detection
+
+if(bang){
+  alert("BANG!");
+}
 }
 
 var step= function(){ // main game loop
