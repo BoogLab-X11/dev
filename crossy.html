@@ -22,6 +22,19 @@ var canvas = document.getElementById('myCanvas');
 var ctx = canvas.getContext('2d'); // get context from canvas object
 let screenWidth = 1000;
 let screenHeight = 500;
+var gameLive = true;
+var sprites={};
+
+var loadsprites=function(){
+  sprites.player=new Image();
+  sprites.player.src='images/hero.png';
+  sprites.background=new Image();
+  sprites.background.src='images/floor.png';
+  sprites.baddie=new Image();
+  sprites.baddie.src='images/enemy.png';
+
+}
+
 
 class gameChar { // class for game character
   constructor(x,y,wid,hi,col,speed){
@@ -44,10 +57,10 @@ var yoff=100;
 var baddie=[]; // declare array before assigning below.
 
 for (i=1;i<4;i++){ // create baddies from gameBaddie class
-  baddie[i] = new gameChar((i*xoff),(i*yoff),50,50,"rgb(0,0,255)",3);
+  baddie[i] = new gameChar((i*xoff),(i*yoff),35,35,"rgb(0,0,255)",3);
 }
 
-player = new gameChar(100,200,50,50,"rgb(0,255,0)",0); // create player
+player = new gameChar(100,200,35,35,"rgb(0,255,0)",0); // create player
 
 document.onkeydown = function(event){
   let keyPressed=event.keyCode;
@@ -65,11 +78,19 @@ document.onkeyup = function(event){
 
 var draw = function(){ // function draw baddies
   ctx.clearRect(0,0,screenWidth,screenHeight);
-  ctx.fillStyle = player.col;
-  ctx.fillRect(player.x, player.y, player.wid, player.hi);
+  ctx.drawImage(sprites.background,0,0);
+
+  ctx.fillStyle = "rgb(0,0,0)";
+  ctx.fillRect(900, 180, 80, 80);
+
+  ctx.drawImage(sprites.player,player.x, player.y);
+  //ctx.fillStyle = player.col;
+  //ctx.fillRect(player.x, player.y, player.wid, player.hi);
   baddie.forEach (function(element){ // this is just blah.foreach(someFunction{someCode}), see updateAndMove
-  ctx.fillStyle = element.col;
-  ctx.fillRect(element.x, element.y, element.wid, element.hi);
+  ctx.drawImage(sprites.baddie,element.x, element.y);
+  //ctx.fillStyle = element.col;
+  //ctx.fillRect(element.x, element.y, element.wid, element.hi);
+
 })
 }
 
@@ -89,27 +110,43 @@ var update = function(){ // // function to update and move player & baddies
         }
       else if (element.y<=5){
         element.speed=3;
-      }}
-
-      function checkCollide(rect){
-      var xOver=Math.abs(player.x - rect.x) <= 50;
-      var yOver=Math.abs(player.y - rect.y) <= 50;
-      bang = (xOver && yOver);
-    }
+      }
+      }
 
 baddie.forEach(updateAndMove); //Call function updateAndMove for each object
-baddie.forEach(checkCollide); //Call function collission detection
+
+function checkCollide(baddie){ //check collision
+var xOver=Math.abs(player.x - baddie.x) <= Math.abs(player.wid , baddie.wid);
+var yOver=Math.abs(player.y - baddie.y) <= Math.abs(player.wid , baddie.wid);
+if (xOver && yOver){
+bang=true;
+gameLive=false;
+}
+}
+
+baddie.forEach(checkCollide);
 
 if(bang){
   alert("BANG!");
+  gameLive=false;
+window.location="";
 }
+
+if(player.x>=905){
+  alert("Yay!");
+  gameLive=false;
+  window.location="";
 }
+
+} //End of update function
 
 var step= function(){ // main game loop
   update();
   draw();
-  window.requestAnimationFrame(step);
+  if(gameLive){window.requestAnimationFrame(step)}
   }
+
+loadsprites();
 step();
 
 </script>
